@@ -1,0 +1,72 @@
+
+# ─────────────────────────────
+# Go build artifacts
+# ─────────────────────────────
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Output directories
+bin/
+dist/
+build/
+
+# Go workspace files
+*.mod~
+*.sum~
+go.sum
+vendor/
+
+# ─────────────────────────────
+# Logs and temp files
+# ─────────────────────────────
+*.log
+*.tmp
+*.swp
+*.bak
+*.pid
+
+# ─────────────────────────────
+# OS / Shell / Misc files
+# ─────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+
+# ─────────────────────────────
+# IDE/editor settings
+# ─────────────────────────────
+
+# VSCode
+.vscode/
+.history/
+
+# JetBrains (GoLand, IntelliJ)
+.idea/
+
+# Vim
+*.swp
+*.swo
+*.swn
+
+# Emacs
+*~
+
+# ─────────────────────────────
+# GitHub Actions artifacts (if needed)
+# ─────────────────────────────
+*.release.json
+*.artifact.zip
+
+# ─────────────────────────────
+# Test and coverage artifacts
+# ─────────────────────────────
+coverage.out
+*.coverprofile
+*.testresult
