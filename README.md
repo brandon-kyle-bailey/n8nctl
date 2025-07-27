@@ -22,11 +22,27 @@
 
 ### 🐧 Linux / 🍎 macOS
 
-Download the latest binary from the [Releases](https://github.com/brandon-kyle-bailey/n8nctl/releases) page:
+Download the latest binaries and checksums from the [Releases](https://github.com/brandon-kyle-bailey/n8nctl/releases) page:
 
 ```bash
-# Replace with the appropriate version/arch
+# Linux amd64
 curl -LO https://github.com/brandon-kyle-bailey/n8nctl/releases/download/v0.1.0/n8nctl-linux-amd64
+curl -LO https://github.com/brandon-kyle-bailey/n8nctl/releases/download/v0.1.0/n8nctl-linux-amd64.sha256
+
+# macOS amd64 (Intel)
+curl -LO https://github.com/brandon-kyle-bailey/n8nctl/releases/download/v0.1.0/n8nctl-darwin-amd64
+curl -LO https://github.com/brandon-kyle-bailey/n8nctl/releases/download/v0.1.0/n8nctl-darwin-amd64.sha256
+
+# macOS arm64 (Apple Silicon)
+curl -LO https://github.com/brandon-kyle-bailey/n8nctl/releases/download/v0.1.0/n8nctl-darwin-arm64
+curl -LO https://github.com/brandon-kyle-bailey/n8nctl/releases/download/v0.1.0/n8nctl-darwin-arm64.sha256
+
+# Verify checksums (optional but recommended)
+sha256sum --check n8nctl-linux-amd64.sha256
+sha256sum --check n8nctl-darwin-amd64.sha256
+sha256sum --check n8nctl-darwin-arm64.sha256
+
+# Make executable and install (example: Linux amd64)
 chmod +x n8nctl-linux-amd64
 sudo mv n8nctl-linux-amd64 /usr/local/bin/n8nctl
 ```
