@@ -7,60 +7,62 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write # Required for creating releases
 
 jobs:
   build:
+    name: Build binaries
     runs-on: ubuntu-latest
     strategy:
       matrix:
         goos: [linux, darwin]
         goarch: [amd64, arm64]
-    outputs:
-      # Export matrix output for use in release job (optional)
-      artifacts: ${{ steps.set-artifacts.outputs.artifacts }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Go
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "stable"
+          go-version: stable
 
-      - name: Set binary name
-        id: vars
+      - id: vars
+        name: Set binary name
         run: echo "binary_name=n8nctl-${{ matrix.goos }}-${{ matrix.goarch }}" >> $GITHUB_OUTPUT
 
       - name: Build CLI
         run: |
           mkdir -p dist
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} CGO_ENABLED=0 \
-          go build -o dist/${{ steps.vars.outputs.binary_name }} .
+            go build -o dist/${{ steps.vars.outputs.binary_name }} .
 
       - name: Generate checksums
         run: |
           cd dist
           sha256sum * > checksums.txt
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload binaries and checksums
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.vars.outputs.binary_name }}
-          path: dist/${{ steps.vars.outputs.binary_name }}
+          name: dist-artifacts
+          path: dist/*
 
   release:
+    name: Create GitHub Release
     needs: build
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
         with:
+          name: dist-artifacts
           path: dist
 
-      - name: Upload release binaries
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             dist/*
