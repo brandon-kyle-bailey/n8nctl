@@ -45,7 +45,7 @@ jobs:
       - name: Upload binaries and checksums
         uses: actions/upload-artifact@v4
         with:
-          name: dist-artifacts
+          name: dist-artifacts-${{ matrix.goos }}-${{ matrix.goarch }}
           path: dist/*
 
   release:
@@ -55,14 +55,35 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
 
     steps:
-      - name: Download build artifacts
+      - name: Download linux-amd64 artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist-artifacts
-          path: dist
+          name: dist-artifacts-linux-amd64
+          path: dist/linux-amd64
+
+      - name: Download linux-arm64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifacts-linux-arm64
+          path: dist/linux-arm64
+
+      - name: Download darwin-amd64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifacts-darwin-amd64
+          path: dist/darwin-amd64
+
+      - name: Download darwin-arm64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifacts-darwin-arm64
+          path: dist/darwin-arm64
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/*
+            dist/linux-amd64/*
+            dist/linux-arm64/*
+            dist/darwin-amd64/*
+            dist/darwin-arm64/*
